@@ -171,6 +171,42 @@ export function climateView(
 	};
 }
 
+/* ---------- lights ---------- */
+
+export type LightView = {
+	entityId: string;
+	name: string;
+	room: string | undefined;
+	isOn: boolean;
+	brightness: number | undefined;
+	brightnessPct: number | undefined;
+	supportsBrightness: boolean;
+};
+
+export function lightView(
+	state: HaState | undefined,
+	options: { name?: string; room?: string } = {}
+): LightView | null {
+	if (!state) return null;
+
+	const attributes = state.attributes;
+	const brightness = num(attributes.brightness);
+	const supported = arr(attributes.supported_color_modes);
+
+	return {
+		entityId: state.entity_id,
+		name:
+			options.name ??
+			str(attributes.friendly_name) ??
+			titleCase(state.entity_id.split('.')[1] ?? 'Light'),
+		room: options.room,
+		isOn: state.state === 'on',
+		brightness,
+		brightnessPct: brightness === undefined ? undefined : Math.round((brightness / 255) * 100),
+		supportsBrightness: brightness !== undefined || supported.some((mode) => mode !== 'onoff')
+	};
+}
+
 /* ---------- weather ---------- */
 
 export type WeatherView = {
@@ -214,6 +250,8 @@ export function weatherView(state: HaState | undefined): WeatherView | null {
 }
 
 export type ForecastDay = {
+	/** Stable key — two days can share a weekday name across a long forecast. */
+	key: string;
 	label: string;
 	condition: string;
 	high: number | undefined;
@@ -229,6 +267,7 @@ export function forecastDays(
 	return entries.slice(1, count + 1).map((entry) => {
 		const date = new Date(entry.datetime);
 		return {
+			key: entry.datetime,
 			label: new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone }).format(date),
 			condition: entry.condition ?? 'unknown',
 			high: entry.temperature,
@@ -238,6 +277,8 @@ export function forecastDays(
 }
 
 export type ForecastHour = {
+	/** Stable key — hourly labels repeat across days. */
+	key: string;
 	label: string;
 	condition: string;
 	temperature: number | undefined;
@@ -254,6 +295,7 @@ export function forecastHours(
 		.slice(0, count);
 
 	return upcoming.map((entry, index) => ({
+		key: entry.datetime,
 		label:
 			index === 0
 				? 'Now'

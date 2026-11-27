@@ -5,7 +5,8 @@ and **weather**. SvelteKit 2/Svelte 5, Tailwind v4 and shadcn-svelte, talking to
 Assistant over its REST + WebSocket APIs.
 
 Built to the `home-assistante-dashboard.pen` mockup: Inter, `#FAFAFA` surfaces, 1px `#E5E5E5`
-borders, 10px cards, near-black `#171717` primary, lucide icons, light theme only.
+borders, 10px cards, near-black `#171717` primary and lucide icons. The desktop dashboard stays
+light; `/display` is a separate near-black kiosk surface.
 
 ## What it does
 
@@ -32,7 +33,41 @@ Every card lives in a single 12-column grid that fills its own rows:
 - **Remove** — same menu, or unpin it in **Add device**.
 
 Order and width are saved to `data/pinned.json` on the server, so they follow you between devices.
-Below 768px every card goes full width and stacks.
+Below 900px every card goes full width and stacks.
+
+## Smart display (kiosk / Redmi Note 8)
+
+`/display` is a dedicated full-screen panel built for a phone or tablet that lives on a desk:
+
+- **Landscape first** — a huge clock, date and current weather on the left; lights and AC on the
+  right. Portrait stacks the clock above the controls instead of shrinking everything.
+- **Safe areas** — the viewport uses `viewport-fit=cover` and every edge is padded with
+  `env(safe-area-inset-*)`, so the waterdrop notch and rounded corners never clip a control.
+- **56px touch targets** — lights are one tap each; every AC tile has 56×56 power and ± buttons,
+  with the live room temperature and the current target shown side by side.
+- **Pure-black theme** — `#000` background with `#0c0c0c` cards to minimise IPS backlight bleed.
+  The moon button cycles **Auto → Night → Day**; Auto dims the whole surface after 21:00 and
+  before 07:00 (America/São_Paulo). The choice is stored in `localStorage`.
+- **Wake Lock** — `navigator.wakeLock.request('screen')` is acquired on load and re-acquired on
+  `visibilitychange` or when the platform releases it.
+- **Full screen** — the expand button requests the Fullscreen API, on top of the PWA's
+  `standalone`/`fullscreen` display mode.
+- **PWA** — `static/manifest.json` sets `start_url: /display`, `display: standalone`,
+  `display_override: ["fullscreen", "standalone"]` and maskable icons. Add the site to the
+  Android home screen and it opens straight into the panel, without browser chrome.
+
+Lights are discovered automatically from every `light.*` entity and labelled with the Home
+Assistant area. To pin a specific order or subset, fill `config.lights` in `src/lib/config.ts`
+with entity IDs. Climate units follow the pinned dashboard order.
+
+> **Wake Lock needs a secure context.** `http://<lan-ip>:3000` does not count as secure in
+> Chrome, so the API is unavailable there — the footer will show “No wake lock”. Serve Haven over
+> HTTPS (Umbrel’s reverse proxy, Tailscale Serve, or a local certificate) to keep the screen on.
+> Fullscreen and the PWA install work either way.
+>
+> **A web page cannot lower the IPS backlight.** Night mode paints a black veil over the
+> interface, which cuts perceived brightness substantially, but for a truly dark room also set
+> Android’s own brightness low (or use a blue-light/night filter).
 
 ## Read this before deploying
 

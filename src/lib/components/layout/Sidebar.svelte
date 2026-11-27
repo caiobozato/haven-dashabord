@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { ChevronsUpDown, House, LayoutDashboard, ShieldCheck } from '@lucide/svelte';
+	import {
+		ChevronsUpDown,
+		House,
+		LayoutDashboard,
+		MonitorSmartphone,
+		ShieldCheck
+	} from '@lucide/svelte';
 	import { config } from '#lib/config.js';
 	import { live } from '#lib/live.svelte.js';
 	import { offlineEntities } from '#lib/ha/health.js';
@@ -34,15 +40,24 @@
 	</a>
 
 	<!-- Navigation -->
-	<nav class="px-2">
+	<nav class="flex flex-col gap-0.5 px-2">
 		<a
 			href="/"
 			onclick={onNavigate}
-			class="flex items-center gap-2.5 rounded-[7px] bg-muted px-2 py-[7px] text-[13.5px] font-semibold text-foreground"
+			class="flex items-center gap-2.5 rounded-[7px] bg-muted px-2 py-2.5 text-[13.5px] font-semibold text-foreground lg:py-[7px]"
 			aria-current="page"
 		>
 			<LayoutDashboard size={16} strokeWidth={1.75} />
 			Dashboard
+		</a>
+
+		<a
+			href="/display"
+			onclick={onNavigate}
+			class="flex items-center gap-2.5 rounded-[7px] px-2 py-2.5 text-[13.5px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:py-[7px]"
+		>
+			<MonitorSmartphone size={16} strokeWidth={1.75} />
+			Smart display
 		</a>
 	</nav>
 

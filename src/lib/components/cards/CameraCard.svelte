@@ -36,13 +36,21 @@
 	let preferStill = $state(false);
 	let snapshotFallback = $state<string | null>(null);
 	let now = $state(new Date());
+	let pageVisible = $state(true);
 
 	onMount(() => {
 		const timer = setInterval(() => (now = new Date()), 1000);
-		return () => clearInterval(timer);
+		const onVisibility = () => (pageVisible = document.visibilityState === 'visible');
+		document.addEventListener('visibilitychange', onVisibility);
+		return () => {
+			clearInterval(timer);
+			document.removeEventListener('visibilitychange', onVisibility);
+		};
 	});
 
-	let stillMode = $derived(imgFailed || streamDisabled || preferStill);
+	// An MJPEG stream keeps decoding in the background, so drop to the still
+	// image while the tab is hidden — meaningful battery on a phone kiosk.
+	let stillMode = $derived(imgFailed || streamDisabled || preferStill || !pageVisible);
 
 	// Fall back to a periodically refreshed still if the camera cannot stream.
 	$effect(() => {
@@ -52,7 +60,9 @@
 		}
 		const refresh = () => (snapshotFallback = `${camera.snapshotUrl}?t=${Date.now()}`);
 		refresh();
-		const timer = setInterval(refresh, 5000);
+		const timer = setInterval(() => {
+			if (document.visibilityState === 'visible') refresh();
+		}, 5000);
 		return () => clearInterval(timer);
 	});
 
@@ -103,7 +113,7 @@
 			<button
 				type="button"
 				onclick={() => (expanded = true)}
-				class="grid size-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+				class="grid size-10 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:size-7"
 				aria-label="Expand camera"
 			>
 				<Maximize2 size={14} strokeWidth={1.75} />
@@ -171,7 +181,7 @@
 		></div>
 
 		<div
-			class="absolute left-3.5 top-3.5 flex items-center gap-1.5 rounded-md bg-black/60 px-2 py-1 backdrop-blur-sm"
+			class="absolute left-3.5 top-3.5 flex items-center gap-1.5 rounded-md bg-black/60 px-2 py-1"
 		>
 			<span class="size-1.5 rounded-full bg-[#EF4444]" class:animate-pulse={!stillMode}></span>
 			<span class="text-[10px] font-semibold tracking-[0.6px] text-white">
@@ -180,7 +190,7 @@
 		</div>
 
 		<div class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-3.5">
-			<span class="rounded-md bg-black/40 px-2 py-1 text-[10.5px] text-white/80 backdrop-blur-sm">
+			<span class="rounded-md bg-black/40 px-2 py-1 text-[10.5px] text-white/80">
 				Today · {timestamp}
 			</span>
 		</div>
@@ -189,7 +199,7 @@
 
 {#if expanded}
 	<div
-		class="fixed inset-0 z-50 flex flex-col bg-black/90 p-4 backdrop-blur-sm"
+		class="fixed inset-0 z-50 flex flex-col bg-black/90 p-4"
 		role="dialog"
 		aria-modal="true"
 		aria-label={`${camera.name} live view`}

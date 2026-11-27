@@ -210,7 +210,7 @@
 					type="button"
 					onclick={() => step(-1)}
 					disabled={!climate.isOn || !canDecrease || target === null}
-					class="grid size-[30px] place-items-center rounded-[7px] border border-border bg-white text-foreground transition-colors hover:bg-muted disabled:opacity-40"
+					class="grid size-11 place-items-center rounded-[7px] border border-border bg-white text-foreground transition-colors hover:bg-muted disabled:opacity-40 lg:size-[30px]"
 					aria-label="Decrease temperature"
 				>
 					<Minus size={13} strokeWidth={2} />
@@ -219,7 +219,7 @@
 					type="button"
 					onclick={() => step(1)}
 					disabled={!climate.isOn || !canIncrease || target === null}
-					class="grid size-[30px] place-items-center rounded-[7px] border border-border bg-white text-foreground transition-colors hover:bg-muted disabled:opacity-40"
+					class="grid size-11 place-items-center rounded-[7px] border border-border bg-white text-foreground transition-colors hover:bg-muted disabled:opacity-40 lg:size-[30px]"
 					aria-label="Increase temperature"
 				>
 					<Plus size={13} strokeWidth={2} />
@@ -235,7 +235,7 @@
 			<button
 				type="button"
 				onclick={() => switchMode(mode)}
-				class="flex h-7 flex-1 items-center justify-center gap-1 rounded-[6px] text-[11px] transition-colors {climate.isOn &&
+				class="flex h-10 flex-1 items-center justify-center gap-1 rounded-[6px] text-[11px] transition-colors lg:h-7 {climate.isOn &&
 				climate.mode === mode
 					? 'border border-border bg-white font-semibold text-foreground shadow-[0_1px_1px_rgba(0,0,0,0.03)]'
 					: 'font-[450] text-muted-foreground hover:text-foreground'}"
