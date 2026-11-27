@@ -253,7 +253,9 @@
 		min-width: 0;
 	}
 
-	@media (max-width: 767px) {
+	/* Landscape phones are ~850px wide; the 12-column grid is unreadable at
+	   that width, so stack cards until there is room for real columns. */
+	@media (max-width: 900px) {
 		.dash-item {
 			grid-column: span 12;
 		}

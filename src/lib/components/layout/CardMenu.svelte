@@ -31,7 +31,7 @@
 			<button
 				{...props}
 				type="button"
-				class="grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground {className}"
+				class="grid size-10 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:size-7 {className}"
 				aria-label={`Card options for ${name}`}
 			>
 				<Ellipsis size={14} strokeWidth={2} />
@@ -49,7 +49,7 @@
 					onSelect(option);
 					open = false;
 				}}
-				class="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-[12.5px] hover:bg-muted"
+				class="flex w-full items-center gap-2 rounded-md px-2 py-2.5 text-[12.5px] hover:bg-muted lg:py-1.5"
 			>
 				<span class="flex-1 text-left">{sizeLabel(option)}</span>
 				{#if span === option}
@@ -70,7 +70,7 @@
 				onRemove();
 				open = false;
 			}}
-			class="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-[12.5px] text-muted-foreground hover:bg-muted hover:text-foreground"
+			class="flex w-full items-center gap-2 rounded-md px-2 py-2.5 text-[12.5px] text-muted-foreground hover:bg-muted hover:text-foreground lg:py-1.5"
 		>
 			Remove from dashboard
 		</button>

@@ -72,3 +72,16 @@ export function turnOff(entityId: string) {
 export function turnOn(entityId: string) {
 	return callService('climate', 'turn_on', { entity_id: entityId });
 }
+
+/* ---------- lights ---------- */
+
+export function toggleLight(entityId: string) {
+	return callService('light', 'toggle', { entity_id: entityId });
+}
+
+export function setLightBrightness(entityId: string, percent: number) {
+	return callService('light', 'turn_on', {
+		entity_id: entityId,
+		brightness_pct: Math.min(100, Math.max(1, Math.round(percent)))
+	});
+}

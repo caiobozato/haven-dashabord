@@ -118,7 +118,7 @@
 	<!-- Hourly strip -->
 	{#if hours.length}
 		<div class="flex items-stretch gap-2 px-4 pb-4">
-			{#each hours as hour (hour.label)}
+			{#each hours as hour (hour.key)}
 				<div
 					class="flex flex-1 flex-col items-center gap-2 rounded-[8px] px-0 py-2.5 {hour.label ===
 					'Now'
@@ -159,7 +159,7 @@
 	<!-- Daily forecast -->
 	<div class="flex flex-1 flex-col justify-center gap-3.5 px-4 py-3.5">
 		<span class="text-[11px] font-medium text-muted-foreground">Next 3 days</span>
-		{#each days as day (day.label)}
+		{#each days as day (day.key)}
 			<div class="flex items-center gap-2">
 				<div class="flex w-[88px] items-center gap-[7px]">
 					<span class="text-[12px] font-medium text-foreground">{day.label}</span>

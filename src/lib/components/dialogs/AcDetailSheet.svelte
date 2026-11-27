@@ -17,7 +17,7 @@
 	function chipClass(active: boolean) {
 		return active
 			? 'border-primary bg-primary text-primary-foreground'
-			: 'border-border bg-white text-foreground hover:border-border-strong';
+			: 'border-border bg-card text-foreground hover:border-border-strong';
 	}
 </script>
 

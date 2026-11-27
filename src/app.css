@@ -60,6 +60,59 @@
 	--violet-soft: #f5f3ff;
 }
 
+/*
+ * Night theme for the smart-display route. Near-black surfaces keep the IPS
+ * backlight from flooding a dark room; the display itself paints #000 in its
+ * own stylesheet, these tokens only cover portalled UI (sheets, toasts).
+ */
+.dark {
+	--background: #0a0a0a;
+	--foreground: #f5f5f5;
+	--card: #111111;
+	--card-foreground: #f5f5f5;
+	--popover: #141414;
+	--popover-foreground: #f5f5f5;
+	--primary: #fafafa;
+	--primary-foreground: #171717;
+	--secondary: #1a1a1a;
+	--secondary-foreground: #f5f5f5;
+	--muted: #1a1a1a;
+	--muted-foreground: #a3a3a3;
+	--accent: #1f1f1f;
+	--accent-foreground: #fafafa;
+	--destructive: #ff6467;
+	--border: #262626;
+	--input: #262626;
+	--ring: #525252;
+
+	--chart-1: #fafafa;
+	--chart-2: #a3a3a3;
+	--chart-3: #737373;
+	--chart-4: #525252;
+	--chart-5: #262626;
+
+	--sidebar: #0a0a0a;
+	--sidebar-foreground: #f5f5f5;
+	--sidebar-primary: #fafafa;
+	--sidebar-primary-foreground: #171717;
+	--sidebar-accent: #1a1a1a;
+	--sidebar-accent-foreground: #fafafa;
+	--sidebar-border: #262626;
+	--sidebar-ring: #525252;
+
+	--subtle-foreground: #737373;
+	--border-strong: #404040;
+	--success: #4ade80;
+	--warning: #fbbf24;
+	--cool: #38bdf8;
+	--cool-soft: #082f49;
+	--eco: #4ade80;
+	--eco-soft: #052e16;
+	--eco-border: #14532d;
+	--violet: #a78bfa;
+	--violet-soft: #2e1065;
+}
+
 @theme inline {
 	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
 	--color-sidebar-ring: var(--sidebar-ring);
@@ -121,13 +174,29 @@
 	body {
 		@apply bg-background text-foreground antialiased;
 		font-feature-settings: 'cv11', 'ss01';
+		-webkit-tap-highlight-color: transparent;
 	}
 	html {
 		@apply font-sans;
+		height: 100%;
+		overscroll-behavior: none;
 	}
 	::selection {
 		background: #171717;
 		color: #fafafa;
+	}
+
+	/* Cheap wins on the Redmi's Adreno GPU: no decorative motion, no long
+	   compositor work. Functional state changes still land instantly. */
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+			scroll-behavior: auto !important;
+		}
 	}
 }
 

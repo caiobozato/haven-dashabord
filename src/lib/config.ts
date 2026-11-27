@@ -22,6 +22,12 @@ export const config = {
 
 	weather: 'weather.home',
 
+	/**
+	 * Lights shown on the smart display. Leave empty to auto-discover every
+	 * `light.*` entity from Home Assistant (room name from the area registry).
+	 */
+	lights: [] as string[],
+
 	/** Camera used for the hero card (the wide one). */
 	heroCamera: 'camera.laundry_tapo_camera_live_view'
 } as const;

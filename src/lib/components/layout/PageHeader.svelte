@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Plus } from '@lucide/svelte';
+	import { MonitorSmartphone, Plus } from '@lucide/svelte';
 	import { ui } from '#lib/ui.svelte.js';
 
 	let {
@@ -15,11 +15,11 @@
 	} = $props();
 </script>
 
-<header class="flex flex flex-wrap items-center justify-between gap-4">
+<header class="flex flex-wrap items-center justify-between gap-4">
 	<div class="flex min-w-0 items-center gap-3">
 		<button
 			type="button"
-			class="-ml-1 grid size-9 shrink-0 place-items-center rounded-lg text-foreground transition-colors hover:bg-muted lg:hidden"
+			class="-ml-1 grid size-10 shrink-0 place-items-center rounded-lg text-foreground transition-colors hover:bg-muted lg:hidden"
 			onclick={() => (ui.mobileNavOpen = true)}
 			aria-label="Open navigation"
 		>
@@ -42,14 +42,25 @@
 		</div>
 	</div>
 
-	{#if onAdd}
-		<button
-			type="button"
-			onclick={onAdd}
-			class="flex h-[34px] items-center gap-1.5 rounded-lg bg-primary px-3 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
+	<div class="flex shrink-0 items-center gap-2">
+		<a
+			href="/display"
+			class="grid size-10 place-items-center rounded-lg border border-border bg-white text-foreground transition-colors hover:bg-muted lg:size-[34px]"
+			aria-label="Open smart display"
+			title="Smart display"
 		>
-			<Plus size={14} />
-			<span class="hidden sm:inline">{addLabel}</span>
-		</button>
-	{/if}
+			<MonitorSmartphone size={15} strokeWidth={1.8} />
+		</a>
+
+		{#if onAdd}
+			<button
+				type="button"
+				onclick={onAdd}
+				class="flex h-10 items-center gap-1.5 rounded-lg bg-primary px-3 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-90 lg:h-[34px]"
+			>
+				<Plus size={14} />
+				<span class="hidden sm:inline">{addLabel}</span>
+			</button>
+		{/if}
+	</div>
 </header>
